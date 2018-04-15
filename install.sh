@@ -4,7 +4,7 @@ alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
 v2ray_dir='/jffs/v2ray/'
 koolshare_dir="/koolshare"
-CUR_VERSION="0.3"
+CUR_VERSION="0.4"
 
 check_ss(){
     ss_version=`dbus get ss_basic_version_local`
@@ -46,6 +46,8 @@ main(){
     cp P01v2ray.sh $koolshare_dir/ss/postscripts/
     echo_date "复制 watchdog"
     cp v2ray_watchdog.sh $v2ray_dir
+    echo_date "复制更新脚本"
+    cp update_v2ray.sh $koolshare_dir/scripts/
 }
 main
 dbus set softcenter_module_v2ray_install=1
