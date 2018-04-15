@@ -4,7 +4,7 @@ alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
 v2ray_dir='/jffs/v2ray/'
 koolshare_dir="/koolshare"
-CUR_VERSION="0.2"
+CUR_VERSION="0.3"
 
 check_ss(){
     ss_version=`dbus get ss_basic_version_local`
@@ -26,24 +26,25 @@ remove_old_config(){
 main(){
     mkdir -p $v2ray_dir
     if [ ! -d "$koolshare_dir/ss" ];then
-        echo_date : "需要先安装 koolshare ss"
+        echo_date "需要先安装 koolshare ss"
         exit 99
     fi
 
     check_ss
     if [ "$?" -eq 0 ];then
+        echo_date "SS 版本要求不够，退出安装"
         exit 99
     fi
 
-    echo_date : "移除旧的 nat-start/wan-start/crontab 配置"
+    echo_date "移除旧的 nat-start/wan-start/crontab 配置"
     remove_old_config
 
-    cd /tmp/v2ray_plugin
-    echo_date : "复制界面文件"
+    cd /tmp/v2ray
+    echo_date "复制界面文件"
     cp Main_Ss_Content.asp $koolshare_dir/webs/Main_Ss_Content.asp
-    echo_date : "复制启动脚本"
+    echo_date "复制启动脚本"
     cp P01v2ray.sh $koolshare_dir/ss/postscripts/
-    echo_date : "复制 watchdog"
+    echo_date "复制 watchdog"
     cp v2ray_watchdog.sh $v2ray_dir
 }
 main
