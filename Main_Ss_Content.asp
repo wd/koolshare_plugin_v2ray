@@ -2420,15 +2420,19 @@ function save_online_nodes(action) {
 																</div>
 															</label>
 														</div>
-                                                        <div id="update_button" style="display:table-cell;float: left;position: absolute;margin-left:70px;padding: 5.5px 0px;">
-                                                            <a type="button" class="ss_btn" style="cursor:pointer" onclick="update_v2ray()">检查并更新v2ray</a>
-                                                        </div>
-                                                        <div style="display:table-cell;float: left;position: absolute;margin-left:200px;padding: 5.5px 0px;">代理&nbsp;<input type="text" class="input_ss_table" id="ss_v2ray_update_proxy" name="ss_v2ray_update_proxy" maxlength="100" size="50" value="" placeholder="--socks5-hostname 127.0.0.1:23456" style="width:80%"></div>
+                                                        <div id="ss_version_show" style="display:table-cell;float: left;position: absolute;margin-left:70px;padding: 5.5px 0px;">
+															<a><i>当前版本：<% dbus_get_def("softcenter_module_v2ray_version", "未知"); %></i></a>
+														</div>
                                                     </td>
 												</tr>
                                                 <tr id="v2ray_config">
 												<th>v2ray 配置</th>
 													<td>
+                                                        <div id="update_button" style="float:left;padding: 5.5px 0px;">
+                                                            <a type="button" class="ss_btn" style="cursor:pointer" onclick="update_v2ray()">检查并更新v2ray</a>
+                                                        </div>
+                                                        <div style="float:left; margin-left: 130px; position: absolute; padding: 5.5px 0px;">代理&nbsp;<input type="text" class="input_ss_table" id="ss_v2ray_update_proxy" name="ss_v2ray_update_proxy" maxlength="100" size="50" value="" placeholder="--socks5-hostname 127.0.0.1:23456" style="width:80%"></div>
+
 														<textarea placeholder="# 填入 v2ray 配置" rows="12" style="width:99%; font-family:'Lucida Console'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="ss_v2ray_config" name="ss_v2ray_config" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
 													</td>
                                                 </tr>
