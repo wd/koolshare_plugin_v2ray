@@ -46,8 +46,8 @@ main(){
     cp P01v2ray.sh $koolshare_dir/ss/postscripts/
     echo_date "复制 watchdog"
     cp v2ray_watchdog.sh $v2ray_dir
-    echo_date "复制更新脚本"
-    cp update_v2ray.sh $koolshare_dir/scripts/
+    echo_date "复制更新和检测脚本"
+    cp update_v2ray.sh ss_v2ray_status.sh $koolshare_dir/scripts/
 }
 main
 dbus set softcenter_module_v2ray_install=1
