@@ -93,7 +93,7 @@ getVersion(){
     TAG_URL="https://api.github.com/repos/v2ray/v2ray-core/releases/latest"
     NEW_VER=`curl ${PROXY} -s ${TAG_URL} --connect-timeout 10| grep 'tag_name' | cut -d\" -f4`
 
-    if [[ $? -ne 0 ]] || [[ $NEW_VER == "" ]]; then
+    if [[ $? -ne 0 ]] || [[ "$NEW_VER" == "" ]]; then
         echo_date "Network error! Please check your network or try again."
         exit
     elif [[ "$NEW_VER" != "$CUR_VER" ]];then
