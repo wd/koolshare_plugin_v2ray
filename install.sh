@@ -48,8 +48,10 @@ main(){
     cp v2ray_watchdog.sh $v2ray_dir
     echo_date "复制更新和检测脚本"
     cp update_v2ray.sh ss_v2ray_status.sh $koolshare_dir/scripts/
-    echo_date "复制 v2ray"
-    cp v2ctl v2ctl.sig v2ray v2ray.sig geoip.dat geosite.dat $v2ray_dir
+    if [ ! -f "$v2ray_dir/v2ray" ];then
+        echo_date "检测到没有安装 v2ray，复制安装 v2ray"
+        cp v2ctl v2ctl.sig v2ray v2ray.sig geoip.dat geosite.dat $v2ray_dir
+    fi
 }
 main
 dbus set softcenter_module_v2ray_install=1
