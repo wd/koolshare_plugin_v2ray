@@ -4,7 +4,7 @@ alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
 v2ray_dir='/jffs/v2ray/'
 koolshare_dir="/koolshare"
-CUR_VERSION="0.6"
+CUR_VERSION="0.7"
 
 check_ss(){
     ss_version=`dbus get ss_basic_version_local`
