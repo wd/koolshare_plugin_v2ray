@@ -230,9 +230,12 @@ function showSSLoadingBar(action) {
 function LoadingSSProgress(action) {
     E("LoadingBar").style.visibility = "visible";
 	if (action == 0) {
-		document.getElementById("loading_block3").innerHTML = "更新设置 ..."
+		document.getElementById("loading_block3").innerHTML = "更新设置 ...";
 		$("#loading_block2").html("<li><font color='#ffcc00'>>请勿刷新本页面，应用中 ...</font></li>");
-	}
+	} else if(action == 1) {
+		document.getElementById("loading_block3").innerHTML = "获取v2ray 状态 ...";
+		$("#loading_block2").html("<li><font color='#ffcc00'>>请勿刷新本页面 ...</font></li>");
+    }
 }
 
 function hideSSLoadingBar() {

@@ -41,6 +41,7 @@ function main(){
     echo_date "结束"
 }
 
+echo > /tmp/v2ray_status.log
 main > /tmp/v2ray_status.log
 echo "O(∩_∩)O~" >> /tmp/v2ray_status.log
 echo "XU6J03M6" >> /tmp/v2ray_status.log

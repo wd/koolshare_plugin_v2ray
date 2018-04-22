@@ -36,6 +36,10 @@ sysArch(){
     return 0
 }
 
+quit(){
+    echo "XU6J03M6"
+}
+
 downloadV2Ray(){
     rm -rf /tmp/v2ray
     mkdir -p /tmp/v2ray
@@ -44,7 +48,7 @@ downloadV2Ray(){
     curl ${PROXY} -L -H "Cache-Control: no-cache" -o ${ZIPFILE} ${DOWNLOAD_LINK}
     if [ $? != 0 ];then
         echo_date "Failed to download! Please check your network or try again."
-        exit 1
+        quit
     fi
     return 0
 }
@@ -58,7 +62,7 @@ installSoftware(){
     getPMT
     if [[ $? -eq 1 ]]; then
         echo_date "The system package manager tool isn't APT or YUM, please install ${COMPONENT} manually."
-        exit
+        quit
     fi
     echo_date "Installing $COMPONENT"
     if [[ $SOFTWARE_UPDATED -eq 0 ]]; then
@@ -71,7 +75,7 @@ installSoftware(){
     $CMD_INSTALL $COMPONENT
     if [[ $? -ne 0 ]]; then
         echo_date "Install ${COMPONENT} fail, please install it manually."
-        exit
+        quit
     fi
     return 0
 }
@@ -82,7 +86,7 @@ extract(){
     unzip $1 -d "/tmp/v2ray/"
     if [[ $? -ne 0 ]]; then
         echo_date "Extracting V2Ray faile!"
-        exit
+        quit
     fi
     return 0
 }
@@ -95,7 +99,7 @@ getVersion(){
 
     if [[ $? -ne 0 ]] || [[ "$NEW_VER" == "" ]]; then
         echo_date "Network error! Please check your network or try again."
-        exit
+        quit
     elif [[ "$NEW_VER" != "$CUR_VER" ]];then
             return 1
     fi
@@ -110,7 +114,7 @@ copyFile() {
     if [[ $? -ne 0 ]]; then
         echo_date "${ERROR}"
         if [ "$MANDATE" = true ]; then
-            exit
+            quit
         fi
     fi
 }
@@ -137,7 +141,7 @@ main() {
     getVersion
     if [[ $? == 0 ]]; then
         echo_date "Lastest version ${NEW_VER} is already installed."
-        exit
+        quit
     else
         echo_date "Installing V2Ray ${NEW_VER} on ${ARCH}"
         downloadV2Ray
@@ -150,4 +154,7 @@ main() {
     return 0
 }
 
-main
+echo > /tmp/v2ray_status.log
+main > /tmp/v2ray_status.log
+echo "O(∩ _∩ )O~" >> /tmp/v2ray_status.log
+quit>> /tmp/v2ray_status.log

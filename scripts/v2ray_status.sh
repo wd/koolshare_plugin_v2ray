@@ -32,6 +32,7 @@ check_status(){
 }
 
 if [ "$v2ray_enable" == "1" ];then
+    echo > /tmp/v2ray_status.log
 	check_status > /tmp/v2ray_status.log 2>&1
 else
 	echo 插件尚未启用！
