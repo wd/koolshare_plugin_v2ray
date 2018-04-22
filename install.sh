@@ -22,6 +22,23 @@ remove_old_config(){
     sed -i '/v2ray_watchdog.sh$/d' /var/spool/cron/crontabs/*
 }
 
+migrate_old_config(){
+    echo_date "尝试迁移旧版本配置"
+    old_v2ray_config=`dbus get ss_v2ray_config`
+    v2ray_config=`dbus get v2ray_config`
+    if [ -n "$old_v2ray_config" ] && [ -z "$v2ray_config" ];then
+        echo_date "发现旧版配置，并且没有新版配置，迁移旧版配置"
+        dbus set v2ray_config=$old_v2ray_config
+    else
+        echo_date "不需要迁移"
+    fi
+
+    echo_date "移除旧版配置"
+    dbus remove ss_v2ray_config
+    dbus remove ss_v2ray_enable
+    dbus remove ss_v2ray_update_proxy
+}
+
 main(){
     mkdir -p $v2ray_dir
     if [ ! -d "$koolshare_dir/ss" ];then
@@ -40,16 +57,23 @@ main(){
 
     cd /tmp/v2ray
     echo_date "复制文件到 koolshare 目录"
-    cp -r webs ss res scripts $koolshare_dir
+    cp -r webs res scripts $koolshare_dir
     cp uninstall.sh $koolshare_dir/scripts/uninstall_v2ray.sh
 
-    echo_date "复制版本号"
-    cp Version $v2ray_dir
+    echo_date "复制文件到 v2ray 目录"
+    cp -r Version ss $v2ray_dir
+
+    echo_date "建立 ss 插件的软链"
+    ln -sf $v2ray_dir/ss/postscripts/P01v2ray.sh $koolshare_dir/ss/postscripts/P01v2ray.sh
 
     if [ ! -f "$v2ray_dir/v2ray" ];then
         echo_date "检测到没有安装 v2ray，复制安装 v2ray"
         cp v2ctl v2ctl.sig v2ray v2ray.sig geoip.dat geosite.dat $v2ray_dir
+    else
+        CUR_VER=`$v2ray_dir/v2ray -version 2>/dev/null | head -n 1 | cut -d " " -f2`
+        echo_date "检测到已经安装 v2ray, 版本 $CUR_VER"
     fi
+    migrate_old_config
 }
 main
 CUR_VERSION=`cat $v2ray_dir/Version`

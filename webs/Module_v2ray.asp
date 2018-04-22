@@ -341,18 +341,22 @@
             var rrt = E("v2ray_enable");
             if (db_v2ray['v2ray_enable'] != "1") {
                 rrt.checked = false;
-                E('v2ray_detail_table').style.display = "none";
+                E('v2ray_detail_table1').style.display = "none";
+                E('v2ray_detail_table2').style.display = "none";
             } else {
                 rrt.checked = true;
-                E('v2ray_detail_table').style.display = "";
+                E('v2ray_detail_table1').style.display = "";
+                E('v2ray_detail_table2').style.display = "";
             }
 
             $("#v2ray_enable").click(
             function(){
                 if(E('v2ray_enable').checked){
-                    E('v2ray_detail_table').style.display = "";
+                    E('v2ray_detail_table1').style.display = "";
+                    E('v2ray_detail_table2').style.display = "";
                 }else{
-                    E('v2ray_detail_table').style.display = "none";
+                    E('v2ray_detail_table1').style.display = "none";
+                    E('v2ray_detail_table2').style.display = "none";
                 }
             });
         }
@@ -523,7 +527,7 @@
                                                        </td>
                                                    </tr>
                                                 </table>
-                                                <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="v2ray_detail_table">
+                                                <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="v2ray_detail_table1">
                                                     <thead>
                                                     <tr>
                                                         <td colspan="2">JSON 配置</td>
@@ -538,7 +542,7 @@
                                                     </tr>
                                                 </table>
 
-                                                <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="v2ray_detail_table">
+                                                <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="v2ray_detail_table2">
                                                     <thead>
                                                     <tr>
                                                         <td colspan="2">基本设置</td>

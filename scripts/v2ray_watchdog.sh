@@ -122,6 +122,11 @@ run_watchdog(){
         echo_date "启动完成"
         echo "v2ray restart at "$(date) >> /tmp/v2ray.log
     fi
+
+    if [ ! -f "$koolshare_dir/ss/postscripts/P01v2ray.sh" ];then
+        echo_date "ss 插件软链丢失，尝试重建"
+        ln -sf $v2ray_dir/ss/postscripts/P01v2ray.sh $koolshare_dir/ss/postscripts/P01v2ray.sh
+    fi
 }
 
 case $1 in
