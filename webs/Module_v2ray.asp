@@ -94,7 +94,6 @@
                         url: 'https://api.github.com/repos/v2ray/v2ray-core/releases/latest',
                         dataType: 'json',
                         success: function(res) {
-                            console.log('github res', res);
                             if(typeof(res) == 'object') {
                                 var version = res.tag_name;
                                 if(version != local_version) {
