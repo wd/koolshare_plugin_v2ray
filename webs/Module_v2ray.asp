@@ -88,13 +88,21 @@
             get_realtime_output('', function(res){
                 eval(res);
                 if (typeof(v2ray_version) == "object") {
-                    var version = v2ray_version['new_version'];
                     var local_version = v2ray_version['cur_version'];
-                    var update = v2ray_version['update'];
-                    if (update == 1) {
-                        $("#updateV2rayBtn").html("<i>升级到：" + version + "</i>");
-                    }
                     $('#v2ray_version_show').html("<i>当前版本: " + local_version + "</i>");
+                    $.ajax({
+                        url: 'https://api.github.com/repos/v2ray/v2ray-core/releases/latest',
+                        dataType: 'json',
+                        success: function(res) {
+                            console.log('github res', res);
+                            if(typeof(res) == 'object') {
+                                var version = res.tag_name;
+                                if(version != local_version) {
+                                    $("#updateV2rayBtn").html("<i>升级到：" + version + "</i>");
+                                }
+                            }
+                        }
+                    });
                 }
 
             });
