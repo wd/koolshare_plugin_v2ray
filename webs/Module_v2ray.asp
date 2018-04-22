@@ -60,7 +60,7 @@
         function version_show() {
             var local_version = db_v2ray["v2ray_module_version"];
             $.ajax({
-                url: 'https://raw.githubusercontent.com/wd/koolshare_plugin_v2ray/master/Version',
+                url: 'https://raw.githubusercontent.com/wd/koolshare_plugin_v2ray/master/Version?timestamp' + new Date(),
                 type: 'GET',
                 dataType: 'text',
                 success: function(version) {
@@ -91,7 +91,7 @@
                     var local_version = v2ray_version['cur_version'];
                     $('#v2ray_version_show').html("<i>当前版本: " + local_version + "</i>");
                     $.ajax({
-                        url: 'https://api.github.com/repos/v2ray/v2ray-core/releases/latest',
+                        url: 'https://api.github.com/repos/v2ray/v2ray-core/releases/latest?timestamp' + new Date(),
                         dataType: 'json',
                         success: function(res) {
                             if(typeof(res) == 'object') {
