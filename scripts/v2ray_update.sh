@@ -12,7 +12,7 @@ CMD_UPDATE=""
 SOFTWARE_UPDATED=0
 
 alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
-PROXY=`dbus get ss_v2ray_update_proxy`
+PROXY=`dbus get v2ray_update_proxy`
 
 sysArch(){
     ARCH=$(uname -m)

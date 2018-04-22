@@ -1,9 +1,6 @@
 #!/bin/sh
 
-# shadowsocks script for AM380 merlin firmware
-# by sadog (sadoneli@gmail.com) from koolshare.cn
-
-eval `dbus export ss`
+eval `dbus export v2ray`
 alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
 check_status(){
@@ -34,7 +31,7 @@ check_status(){
     ps | grep 23456
 }
 
-if [ "$ss_v2ray_enable" == "1" ];then
+if [ "$v2ray_enable" == "1" ];then
 	check_status > /tmp/v2ray_status.log 2>&1
 else
 	echo 插件尚未启用！

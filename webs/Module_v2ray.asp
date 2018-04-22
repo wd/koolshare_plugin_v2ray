@@ -14,6 +14,7 @@
         <link rel="stylesheet" type="text/css" href="ParentalControl.css">
         <link rel="stylesheet" type="text/css" href="css/icon.css">
         <link rel="stylesheet" type="text/css" href="css/element.css">
+        <link rel="stylesheet" type="text/css" href="/res/shadowsocks.css">
         <script type="text/javascript" src="/state.js"></script>
         <script type="text/javascript" src="/popup.js"></script>
         <script type="text/javascript" src="/help.js"></script>
@@ -28,28 +29,46 @@
         var _responseLen;
         var noChange = 0;
 
-        var params_input = ["v2ray_host"];
+        var params_input = ["v2ray_host", "v2ray_update_proxy"];
         var params_check = ["v2ray_enable"];
         var params_base64 = ["v2ray_config"];
         var current_page = 'Module_v2ray.asp';
 
         function init() {
             show_menu();
-	        update_ss_ui(db_v2ray);
+            update_ss_ui(db_v2ray);
             buildswitch();
+            version_show();
+        }
+
+        function version_show() {
+            var local_version = db_v2ray["v2ray_module_version"];
+            $.ajax({
+                url: 'https://raw.githubusercontent.com/wd/koolshare_plugin_v2ray/master/Version',
+                type: 'GET',
+                dataType: 'text',
+                success: function(version) {
+                    if (typeof(version) != "undefined" && version.length > 0) {
+                        version = version.split('\n')[0];
+                        if (version != local_version) {
+                            $("#updateBtn").html("<i>升级到：" + local_version + "</i>");
+                        }
+                    }
+                }
+            });
         }
 
         function update_ss_ui(obj) {
             // All base64 values
-	        for (var i = 0; i < params_base64.length; i++) {
+            for (var i = 0; i < params_base64.length; i++) {
                 var key = params_base64[i];
                 if(E(key)) {
-	        	    E(key).value = Base64.decode(obj[key] || "");
+                    E(key).value = Base64.decode(obj[key] || "");
                 }
-	        }
+            }
 
             // All check values
-	        for (var i = 0; i < params_check.length; i++) {
+            for (var i = 0; i < params_check.length; i++) {
                 var key = params_check[i];
                 if(E(key)) {
                     if(obj[key] == 1){
@@ -61,10 +80,10 @@
             }
 
             // All input values
-	        for (var i = 0; i < params_input.length; i++) {
+            for (var i = 0; i < params_input.length; i++) {
                 var key = params_input[i];
                 if(E(key)) {
-		            E(key).value = obj[key] || "";
+                    E(key).value = obj[key] || "";
                 }
             }
         }
@@ -95,16 +114,16 @@
                     }
                 }
             }
-	        dbus["SystemCmd"] = "ss_config.sh";
-	        dbus["action_mode"] = " Refresh ";
-	        dbus["current_page"] = current_page;
+            dbus["SystemCmd"] = "ss_config.sh";
+            dbus["action_mode"] = " Refresh ";
+            dbus["current_page"] = current_page;
             //push_data(dbus, '/res/ss_proc_status.htm');
             push_data(dbus, '/cmdRet_check.htm');
         }
 
         function showLoadingBar(check_file) {
-		    showSSLoadingBar(0);
-		    setTimeout("get_realtime_log('" + check_file + "');", 500);
+            showSSLoadingBar(0);
+            setTimeout("get_realtime_log('" + check_file + "');", 500);
         }
 
         function push_data(obj, check_file) {
@@ -125,55 +144,55 @@
         }
 
         function get_realtime_log(url) {
-        	$.ajax({
-        		url: url,
-        		dataType: 'html',
-        		error: function(xhr) {
-        			setTimeout("get_realtime_log('" + url + "');", 1000);
-        		},
-        		success: function(response) {
-        			var retArea = E("log_content3");
-        			if (response.search("XU6J03M6") != -1) {
-        				retArea.value = response.replace("XU6J03M6", " ");
-        				E("ok_button").style.display = "";
-        				retArea.scrollTop = retArea.scrollHeight;
-        				x = 5;
-        				count_down_close();
-        				return true;
-        			} else {
-        				E("ok_button").style.display = "none";
-        			}
-        			if (_responseLen == response.length) {
-        				noChange++;
-        			} else {
-        				noChange = 0;
-        			}
-        			if (noChange > 1000) {
-        				return false;
-        			} else {
-        				setTimeout("get_realtime_log('" + url + "');", 250);
-        			}
-        			retArea.value = response.replace("XU6J03M6", " ");
-        			retArea.scrollTop = retArea.scrollHeight;
-        			_responseLen = response.length;
-        		},
-        		error: function() {
-        			setTimeout("get_realtime_log('" + url + "');", 500);
-        		}
-        	});
+            $.ajax({
+                url: url,
+                dataType: 'html',
+                error: function(xhr) {
+                    setTimeout("get_realtime_log('" + url + "');", 1000);
+                },
+                success: function(response) {
+                    var retArea = E("log_content3");
+                    if (response.search("XU6J03M6") != -1) {
+                        retArea.value = response.replace("XU6J03M6", " ");
+                        E("ok_button").style.display = "";
+                        retArea.scrollTop = retArea.scrollHeight;
+                        x = 5;
+                        count_down_close();
+                        return true;
+                    } else {
+                        E("ok_button").style.display = "none";
+                    }
+                    if (_responseLen == response.length) {
+                        noChange++;
+                    } else {
+                        noChange = 0;
+                    }
+                    if (noChange > 1000) {
+                        return false;
+                    } else {
+                        setTimeout("get_realtime_log('" + url + "');", 250);
+                    }
+                    retArea.value = response.replace("XU6J03M6", " ");
+                    retArea.scrollTop = retArea.scrollHeight;
+                    _responseLen = response.length;
+                },
+                error: function() {
+                    setTimeout("get_realtime_log('" + url + "');", 500);
+                }
+            });
         }
 
         function count_down_close() {
-        	if (x == "0") {
-        		hideSSLoadingBar();
-        	}
-        	if (x < 0) {
-        		E("ok_button1").value = "手动关闭"
-        		return false;
-        	}
-        	E("ok_button1").value = "自动关闭（" + x + "）"
-        		--x;
-        	setTimeout("count_down_close();", 1000);
+            if (x == "0") {
+                hideSSLoadingBar();
+            }
+            if (x < 0) {
+                E("ok_button1").value = "手动关闭"
+                return false;
+            }
+            E("ok_button1").value = "自动关闭（" + x + "）"
+                --x;
+            setTimeout("count_down_close();", 1000);
         }
 
         function onSubmit() {
@@ -204,57 +223,12 @@
             });
         }
 
-        function check_selected(obj, m) {
-            var o = document.getElementById(obj);
-            for (var c = 0; c < o.length; c++) {
-                if (o.options[c].value == m) {
-                    o.options[c].selected = true;
-                    break;
-                }
-            }
-        }
-
-        function write_ddnspod_run_status(){
-            $.ajax({
-                type: "get",
-                url: "dbconf?p=ddnspod_",
-                dataType: "script",
-                success: function() {
-                    var p = "ddnspod_";
-                    var params = ["run_status"];
-                    for (var i = 0; i < params.length; i++) {
-                        if (typeof db_ddnspod_[p + params[i]] !== "undefined") {
-                            $("#ddnspod_"+params[i]).val(db_ddnspod_[p + params[i]]);
-                        }
-                    }
-                    $("#ddnspod_run_state").html(db_ddnspod_['ddnspod_run_status']);
-
-                    setTimeout("write_ddnspod_run_status()", 10000);
-                }
-            });
-        }
-
-        function version_show(){
-            $("#ddnspod_version_status").html("<i>当前版本：" + db_ddnspod_['ddnspod_version']);
-            $.ajax({
-                url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/ddnspod/config.json.js',
-                type: 'GET',
-                success: function(res) {
-                    var txt = $(res.responseText).text();
-                    if(typeof(txt) != "undefined" && txt.length > 0) {
-                        //console.log(txt);
-                        var obj = $.parseJSON(txt.replace("'", "\""));
-                        $("#ddnspod_version_status").html("<i>当前版本：" + obj.version);
-                        if(obj.version != db_ddnspod_["ddnspod_version"]) {
-                            $("#ddnspod_version_status").html("<i>有新版本：" + obj.version);
-                        }
-                    }
-                }
-            });
-        }
-
-        function done_validating(action) {
-            return true;
+        function update_v2ray_plugin() {
+            var dbus = {};
+            dbus["SystemCmd"] = "v2ray_plugin_update.sh";
+            dbus["action_mode"] = " Refresh ";
+            dbus["current_page"] = current_page;
+            push_data(dbus);
         }
 
         function reload_Soft_Center() {
@@ -267,25 +241,25 @@
         <div id="Loading" class="popup_bg"></div>
         <div id="LoadingBar" class="popup_bar_bg">
         <table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock"  align="center">
-        	<tr>
-        		<td height="100">
-        		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
-        		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
-        		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;overflow:hidden">
-        			<textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="border:1px solid #000;width:99%; font-family:'Lucida Console'; font-size:11px;background:#000;color:#FFFFFF;outline: none;padding-left:3px;padding-right:22px;overflow-x:hidden"></textarea>
-        		</div>
-        		<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
-        			<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">
-        		</div>
-        		</td>
-        	</tr>
+            <tr>
+                <td height="100">
+                <div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
+                <div id="loading_block2" style="margin:10px auto;width:95%;"></div>
+                <div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;overflow:hidden">
+                    <textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="border:1px solid #000;width:99%; font-family:'Lucida Console'; font-size:11px;background:#000;color:#FFFFFF;outline: none;padding-left:3px;padding-right:22px;overflow-x:hidden"></textarea>
+                </div>
+                <div id="ok_button" class="apply_gen" style="background: #000;display: none;">
+                    <input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">
+                </div>
+                </td>
+            </tr>
         </table>
         </div>
 
         <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
         <form method="post" name="form" action="/applydb.cgi?p=v2ray" target="hidden_frame">
-            <input type="hidden" name="current_page" value="Module_ddnspod.asp"/>
-            <input type="hidden" name="next_page" value="Module_ddnspod.asp"/>
+            <input type="hidden" name="current_page" value="Module_v2ray.asp"/>
+            <input type="hidden" name="next_page" value="Module_v2ray.asp"/>
             <input type="hidden" name="group_id" value=""/>
             <input type="hidden" name="modified" value="0"/>
             <input type="hidden" name="action_mode" value=""/>
@@ -338,10 +312,17 @@
                                                                     </div>
                                                                 </label>
                                                             </div>
-                                                            <div id="ddnspod_version_status" style="padding-top:5px;margin-left:230px;margin-top:0px;float:left;">
-                                                                <i>当前版本：<% dbus_get_def("ddnspod_version", "未知"); %></i>
+                                                            <div id="update_button" style="display:table-cell;float: left;position: absolute;margin-left:70px;padding: 5.5px 0px;">
+                                                                <a id="updateBtn" type="button" class="ss_btn" style="cursor:pointer" onclick="update_v2ray_plugin()">检查并更新</a>
                                                             </div>
-                                                    </td>
+                                                            <div id="ss_version_show" style="display:table-cell;float: left;position: absolute;margin-left:170px;padding: 5.5px 0px;"> 
+                                                                <i>当前版本：<% dbus_get_def("v2ray_module_version", "未知"); %></i>
+                                                            </div>
+                                                            <div style="display:table-cell;float: left;margin-left:270px;position: absolute;padding: 5.5px 0px;">
+                                                                <a type="button" class="ss_btn" target="_blank" href="https://github.com/wd/koolshare_plugin_v2ray/blob/master/Changelog.md">更新日志</a>
+                                                            </div>
+
+                                                        </td>
                                                     </tr>
                                                 </table>
                                                 <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="v2ray_detail_table">
@@ -351,9 +332,15 @@
                                                     </tr>
                                                     </thead>
                                                     <tr>
+                                                        <th width="35%">更新用代理服务器</th>
+                                                        <td>
+                                                            <input type="text" class="input_ss_table" style="width:auto;" size="50" id="v2ray_update_proxy" name="v2ray_update_proxy" maxlength="50" placeholder="--socks5-hostname 127.0.0.1:23456" value='<% dbus_get_def("v2ray_update_proxy", ""); %>' >
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
                                                         <th width="35%">服务器</th>
                                                         <td>
-                                                            <input type="text" class="input_ss_table" style="width:auto;" size="30" id="v2ray_host" name="v2ray_host" maxlength="20" placeholder="v2ray 服务器" value='<% dbus_get_def("ddnspod_config_uname", ""); %>' >
+                                                            <input type="text" class="input_ss_table" style="width:auto;" size="30" id="v2ray_host" name="v2ray_host" maxlength="20" placeholder="v2ray 服务器" value='<% dbus_get_def("v2ray_host", ""); %>' >
                                                         </td>
                                                     </tr>
                                                     <tr>
