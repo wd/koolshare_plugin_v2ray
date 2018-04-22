@@ -33,7 +33,7 @@
         var ss_enable = 0;
         var v2ray_version;
 
-        var params_input = ["v2ray_host", "v2ray_update_proxy"];
+        var params_input = ["v2ray_address", "v2ray_update_proxy", "v2ray_port", "v2ray_uuid", "v2ray_alterid"];
         var params_check = ["v2ray_enable"];
         var params_base64 = ["v2ray_config"];
         var current_page = 'Module_v2ray.asp';
@@ -522,30 +522,50 @@
                                                            <input type="text" class="input_ss_table" style="width:auto;" size="50" id="v2ray_update_proxy" name="v2ray_update_proxy" maxlength="50" placeholder="--socks5-hostname 127.0.0.1:23456" value='<% dbus_get_def("v2ray_update_proxy", ""); %>' >
                                                        </td>
                                                    </tr>
+                                                </table>
+                                                <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="v2ray_detail_table">
+                                                    <thead>
+                                                    <tr>
+                                                        <td colspan="2">JSON 配置</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tr>
+                                                    <th width="20%">配置</th>
+                                                    <td>
+                                                        <i>JSON 配置和下面的基本配置二选一，优先使用 JSON 配置。</i><br />
+                                                        <textarea placeholder="# v2ray 配置" rows="12" style="width:99%; font-family:'Lucida Console'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="v2ray_config" name="v2ray_config" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
+                                                    </td>
+                                                    </tr>
+                                                </table>
 
-                                                    </table>
-                                                    <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="v2ray_detail_table">
-                                                        <thead>
-                                                        <tr>
-                                                            <td colspan="2">基本设置</td>
-                                                        </tr>
-                                                        </thead>
-                                                        <tr>
-                                                            <th width="35%">服务器</th>
-                                                            <td>
-                                                                <input type="text" class="input_ss_table" style="width:auto;" size="30" id="v2ray_host" name="v2ray_host" maxlength="20" placeholder="v2ray 服务器" value='<% dbus_get_def("v2ray_host", ""); %>' >
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th width="35%">用户uuid</th>
-                                                            <td>
-                                                                <input  type="password" class="input_ss_table" style="width:auto;" size="20"  id="v2ray_id" name="v2ray_id" maxlength="30" placeholder="v2ray id" value='<% dbus_get_def("v2ray_id", ""); %>' />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                        <th width="20%">配置</th>
+                                                <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="v2ray_detail_table">
+                                                    <thead>
+                                                    <tr>
+                                                        <td colspan="2">基本设置</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tr>
+                                                        <th width="35%">服务器</th>
                                                         <td>
-                                                            <textarea placeholder="# v2ray 配置" rows="12" style="width:99%; font-family:'Lucida Console'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="v2ray_config" name="v2ray_config" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
+                                                            <input type="text" class="input_ss_table" style="width:auto;" size="30" id="v2ray_address" name="v2ray_address" maxlength="30" value='<% dbus_get_def("v2ray_address", ""); %>' >
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th width="35%">端口</th>
+                                                        <td>
+                                                            <input  type="text" class="input_ss_table" style="width:auto;" size="30"  id="v2ray_port" name="v2ray_port" maxlength="30" value='<% dbus_get_def("v2ray_port", ""); %>' />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th width="35%">用户UUID</th>
+                                                        <td>
+                                                            <input  type="password" class="input_ss_table" style="width:auto;" size="30"  id="v2ray_uuid" name="v2ray_uuid" maxlength="50" value='<% dbus_get_def("v2ray_uuid", ""); %>' />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th width="35%">AlterId</th>
+                                                        <td>
+                                                            <input  type="text" class="input_ss_table" style="width:auto;" size="30"  id="v2ray_alterid" name="v2ray_alterid" maxlength="30" value='<% dbus_get_def("v2ray_alterid", ""); %>' />
                                                         </td>
                                                     </tr>
                                                 </table>

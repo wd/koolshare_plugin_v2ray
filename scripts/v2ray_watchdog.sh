@@ -2,8 +2,8 @@
 
 alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
-v2ray_enable=`dbus get v2ray_enable`
-v2ray_config=`dbus get v2ray_config`
+eval `dbus export v2ray`
+
 v2ray_dir='/jffs/v2ray'
 koolshare_dir='/koolshare'
 v2ray_bin="$v2ray_dir/v2ray"
@@ -18,9 +18,67 @@ is_v2ray_alive() {
 }
 
 write_config(){
+    echo_date "写入配置文件"
     if [ -n "$v2ray_config" ];then
-        echo_date "写入配置文件"
+        echo_date "优先使用 JSON 配置"
         echo "$v2ray_config" | base64_decode > $v2ray_dir/config.json
+    else
+        echo_date "生成配置文件"
+echo '{
+  "log": {
+    "loglevel": "none"
+  },
+  "inbound": {
+    "port": 23456,
+    "listen": "127.0.0.1",
+    "protocol": "socks",
+    "settings": {
+      "udp": true
+    }
+  },
+  "inboundDetour":
+  [
+   {
+         "port": 3333,
+         "listen": "0.0.0.0",
+         "protocol": "dokodemo-door",
+         "settings": {
+             "network": "tcp,udp",
+             "followRedirect": true
+         }
+    }
+  ],
+  "outbound": {
+    "protocol": "vmess",
+    "settings": {
+      "vnext": [
+        {
+          "address": "V2RAY_ADDRESS",
+          "port": V2RAY_PORT,
+          "users": [
+            {
+              "id": "V2RAY_UUID",
+              "alterId": V2RAY_ALTERID,
+              "security": "auto"
+            }
+          ]
+        }
+      ]
+    },
+   "streamSettings": {
+      "network": "tcp"
+    }
+  },
+  "policy": {
+    "levels": {
+      "0": {"uplinkOnly": 0}
+    }
+  }
+}' \
+| sed "s/V2RAY_ADDRESS/$v2ray_address/" \
+| sed "s/V2RAY_PORT/$v2ray_port/" \
+| sed "s/V2RAY_UUID/$v2ray_uuid/" \
+| sed "s/V2RAY_ALTERID/$v2ray_alterid/" > $v2ray_dir/config.json
     fi
 }
 
