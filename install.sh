@@ -4,7 +4,6 @@ alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
 v2ray_dir='/jffs/v2ray/'
 koolshare_dir="/koolshare"
-CUR_VERSION="0.7"
 
 check_ss(){
     ss_version=`dbus get ss_basic_version_local`
@@ -40,22 +39,23 @@ main(){
     remove_old_config
 
     cd /tmp/v2ray
-    echo_date "复制界面文件"
-    cp Main_Ss_Content.asp $koolshare_dir/webs/Main_Ss_Content.asp
-    echo_date "复制启动脚本"
-    cp P01v2ray.sh $koolshare_dir/ss/postscripts/
-    echo_date "复制 watchdog"
-    cp v2ray_watchdog.sh $v2ray_dir
-    echo_date "复制更新和检测脚本"
-    cp update_v2ray.sh ss_v2ray_status.sh $koolshare_dir/scripts/
+    echo_date "复制文件到 koolshare 目录"
+    cp -r webs ss res scripts $koolshare_dir
+    cp uninstall.sh $koolshare_dir/scripts/uninstall_v2ray.sh
+
+    echo_date "复制版本号"
+    cp Version $v2ray_dir
+
     if [ ! -f "$v2ray_dir/v2ray" ];then
         echo_date "检测到没有安装 v2ray，复制安装 v2ray"
         cp v2ctl v2ctl.sig v2ray v2ray.sig geoip.dat geosite.dat $v2ray_dir
     fi
 }
 main
+CUR_VERSION=`cat $v2ray_dir/Version`
 dbus set softcenter_module_v2ray_install=1
 dbus set softcenter_module_v2ray_version="$CUR_VERSION"
 dbus set softcenter_module_v2ray_title="科学上网v2ray插件"
 dbus set softcenter_module_v2ray_description="科学上网v2ray插件"
-dbus set softcenter_module_v2ray_home_url=Main_Ss_Content.asp
+dbus set softcenter_module_v2ray_home_url=Module_v2ray.asp
+dbus set v2ray_module_version=$CUR_VERSION

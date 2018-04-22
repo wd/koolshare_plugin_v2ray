@@ -2,9 +2,10 @@
 
 alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
-v2ray_enable=`dbus get ss_v2ray_enable`
-#v2ray_enable=1
+v2ray_enable=`dbus get v2ray_enable`
+v2ray_config=`dbus get v2ray_config`
 v2ray_dir='/jffs/v2ray'
+koolshare_dir='/koolshare'
 v2ray_bin="$v2ray_dir/v2ray"
 
 is_v2ray_alive() {
@@ -17,9 +18,9 @@ is_v2ray_alive() {
 }
 
 write_config(){
-    if [ -n "$ss_v2ray_config" ];then
+    if [ -n "$v2ray_config" ];then
         echo_date "写入配置文件"
-        echo "$ss_v2ray_config" | base64_decode > $v2ray_dir/config.json
+        echo "$v2ray_config" | base64_decode > $v2ray_dir/config.json
     fi
 }
 
@@ -29,7 +30,7 @@ start_v2ray(){
         write_config
         stop_ss
         $v2ray_bin &
-        cru a 'v2raywatchdog' "*/1 * * * * /bin/sh $v2ray_dir/v2ray_watchdog.sh"
+        cru a 'v2raywatchdog' "*/1 * * * * /bin/sh $koolshare_dir/scripts/v2ray_watchdog.sh"
         echo $$ > /tmp/v2ray.pid
     else
         echo_date "v2ray 开关关闭中，不执行启动"

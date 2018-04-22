@@ -35,9 +35,9 @@ check_status(){
 }
 
 if [ "$ss_v2ray_enable" == "1" ];then
-	check_status > /tmp/ss_proc_status.log 2>&1
+	check_status > /tmp/v2ray_status.log 2>&1
 else
 	echo 插件尚未启用！
 fi
-echo "O(∩_∩)O~" >> /tmp/ss_proc_status.log
-echo "XU6J03M6" >> /tmp/ss_proc_status.log
+echo "O(∩_∩)O~" >> /tmp/v2ray_status.log
+echo "XU6J03M6" >> /tmp/v2ray_status.log
