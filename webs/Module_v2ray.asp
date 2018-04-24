@@ -636,6 +636,11 @@
                                                 <div class="apply_gen">
                                                     <button id="cmdBtn" type="button" class="button_gen" onclick="onSubmit()">提交</button>
                                                 </div>
+										        <div style="float:right">
+											        使用说明： <a href="https://tinyurl.com/koosharev2ray" target="_blank"> <i><u>https://tinyurl.com/koosharev2ray</u></i> </a> <br/>
+											        问题反馈： <a href="https://github.com/wd/koolshare_plugin_v2ray/issues" target="_blank"> <i><u>https://github.com/wd/koolshare_plugin_v2ray</u></i> </a> <br/>
+											        Telegram： <a href="https://t.me/koolsharev2ray" target="_blank"> <i><u>https://t.me/koolsharev2ray</u></i> </a>
+										        </div>
                                             </td>
                                         </tr>
                                     </table>
