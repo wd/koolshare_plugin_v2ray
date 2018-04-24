@@ -32,6 +32,8 @@
         var checkss = 0;
         var ss_enable = 0;
         var v2ray_version;
+        var v2ray_inbound = {"port":23456,"listen":"127.0.0.1","protocol":"socks","settings":{"udp":true}};
+        var v2ray_inboundDetour = [{"port":3333,"listen":"0.0.0.0","protocol":"dokodemo-door","settings":{"network":"tcp,udp","followRedirect":true}}];
 
         var params_input = ["v2ray_address", "v2ray_update_proxy", "v2ray_port", "v2ray_uuid", "v2ray_alterid"];
         var params_check = ["v2ray_enable"];
@@ -44,6 +46,11 @@
             update_ss_ui(db_v2ray);
             buildswitch();
             version_show();
+            config_valid_show();
+            $('#v2ray_config').change(function(el){
+                config_valid_show();
+            });
+
             v2ray_version_show();
             setTimeout("get_ss_status_data()", 500);
         }
@@ -54,6 +61,58 @@
                 E('ss_status').innerHTML = "<a href='Main_Ss_Content.asp'>ss 状态:&nbsp;<i>运行中</i></a>";
             } else {
                 E('ss_status').innerHTML = "<a href='Main_Ss_Content.asp'>ss 状态:&nbsp;<span style='color:red;'>关闭中</span></a>";
+            }
+        }
+
+        function config_valid_show() {
+            var v2ray_user_config = E('v2ray_config').value;
+            var result = '';
+            if (typeof(v2ray_user_config) != "undefined" && v2ray_user_config.length > 0) {
+                try {
+                    var config = JSON.parse(v2ray_user_config);
+                    if(typeof(config) != 'object') {
+                        throw "v2ray_config is not object";
+                    }
+
+                    if(config_valid_check(config)) {
+                        result = '<i>有效</i>';
+                    } else {
+                        result = '<i>可能不符合要求</i>&nbsp;<input type="button" value="尝试修复" onClick="fix_config()"/>';
+                    }
+                }catch(e){
+                    result = '<i>JSON 格式解析错误：' + e + "</i>";
+                }
+                E('v2ray_config_state').innerHTML = '<div id="v2ray_config_state_text">配置检查结果: ' + result + '</div><div >注意：只能检查是否满足基本需求，并不能验证配置是否可用。</div>';
+            } else {
+                E('v2ray_config_state').innerHTML = '';
+            }
+        }
+
+        function config_valid_check(config) {
+            if(typeof(config['inbound']) == 'object' && typeof(config['inboundDetour']) == 'object') {
+                var inbound = JSON.stringify(config['inbound']);
+                var inboundDetour = JSON.stringify(config['inboundDetour']);
+
+                if(inbound == JSON.stringify(v2ray_inbound) && inboundDetour == JSON.stringify(v2ray_inboundDetour)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function fix_config() {
+            var v2ray_user_config = E('v2ray_config').value;
+            if (typeof(v2ray_user_config) != "undefined" && v2ray_user_config.length > 0) {
+                try {
+                    var config = JSON.parse(v2ray_user_config);
+                    config['inbound'] = v2ray_inbound;
+                    config['inboundDetour'] = v2ray_inboundDetour;
+                    E('v2ray_config').value = JSON.stringify(config, null, 4);
+                    config_valid_show();
+                } catch(e) {
+                    alert('修复失败:' + e);
+                }
             }
         }
 
@@ -534,10 +593,10 @@
                                                     </tr>
                                                     </thead>
                                                     <tr>
-                                                    <th width="20%">配置</th>
+                                                    <th width="20%">「JSON 配置」和下面的「基本配置」二选一，同时配置的话<i>优先</i>使用 「JSON 配置」</th>
                                                     <td>
-                                                        <i>JSON 配置和下面的基本配置二选一，优先使用 JSON 配置。</i><br />
-                                                        <textarea placeholder="# v2ray 配置" rows="12" style="width:99%; font-family:'Lucida Console'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="v2ray_config" name="v2ray_config" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
+                                                        <textarea placeholder="v2ray 配置的 json 文件内容" rows="12" style="width:99%; font-family:'Lucida Console'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="v2ray_config" name="v2ray_config" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
+                                                        <div id="v2ray_config_state"></div>
                                                     </td>
                                                     </tr>
                                                 </table>
